@@ -1,6 +1,5 @@
 package leetcode_days;
 
-import leetcode_days.init_method.InitListArray;
 
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class D20240125 {
 
     public static void main(String[] args) {
         D20240125 d20240125 = new D20240125();
-        System.out.println(d20240125.sumIndicesWithKSetBits(InitListArray.buildInterArray("5,10,1,5,2"), 1));
-        System.out.println(d20240125.sumIndicesWithKSetBits(InitListArray.buildInterArray("4,3,2,1"), 2));
+//        System.out.println(d20240125.sumIndicesWithKSetBits(InitListArray.buildInterArray("5,10,1,5,2"), 1));
+//        System.out.println(d20240125.sumIndicesWithKSetBits(InitListArray.buildInterArray("4,3,2,1"), 2));
     }
 }
