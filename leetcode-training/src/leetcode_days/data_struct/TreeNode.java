@@ -5,16 +5,24 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class TreeNode {
+
+    private static class Pair {
+        public int position;
+        public String key;
+
+        public Pair(int position, String key) {
+            this.position = position;
+            this.key = key;
+        }
+    }
+
     public int val;
     public TreeNode left;
     public TreeNode right;
 
-    private Integer high;
+    private int position;
 
     int getHigh() {
-        if (high != null) {
-            return high;
-        }
         int leftHight = 0;
         int rightHight = 0;
         if (this.left != null) {
@@ -23,20 +31,20 @@ public class TreeNode {
         if (this.right != null) {
             rightHight = this.right.getHigh();
         }
-        high = Math.max(leftHight, rightHight) + 1;
-        return high;
+        return Math.max(leftHight, rightHight) + 1;
     }
 
-    private boolean isLastInRow;
-
-    void setLastInRow(boolean lastInRow) {
-        isLastInRow = lastInRow;
+    void getPosition() {
+        if (this.left != null) {
+            this.left.position = (this.position - 2);
+            this.left.getPosition();
+        }
+        if (this.right != null) {
+            this.right.position = (this.position + 2);
+            this.right.getPosition();
+        }
     }
 
-
-    boolean isLastInRow() {
-        return isLastInRow;
-    }
 
     public TreeNode() {
 
@@ -61,6 +69,7 @@ public class TreeNode {
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] != null) {
                 TreeNode node = new TreeNode(nums[i]);
+                assert index != null;
                 if (isleft) {
                     index.left = node;
                 } else {
@@ -76,13 +85,59 @@ public class TreeNode {
         return treeNode;
     }
 
-
-    private void addEmptyStringToSB(StringBuilder sb, int length) {
-        sb.append(" ".repeat(Math.max(0, length)));
+    @Override
+    public String toString() {
+        // 处理一下当前的层数
+        int high = this.getHigh();
+        this.position = (high - 1) * 2;
+        this.getPosition();
+        Queue<TreeNode> arrayDeque = new ArrayDeque<>();
+        arrayDeque.add(this);
+        StringBuilder stringBuilder = new StringBuilder();
+        // 层次遍
+        return treeToString(stringBuilder, arrayDeque);
     }
-    //TODO 完善树的输出
-//    @Override
-//    public String toString() {
-//
-//    }
+
+    private String treeToString(StringBuilder stringBuilder, Queue<TreeNode> arrayDeque) {
+        Queue<Pair> keyQueue = new ArrayDeque<>();
+        int count = 1;
+        int size;
+        int index;
+        while (!arrayDeque.isEmpty()) {
+            index = 0;
+            size = 0;
+            while (count > 0) {
+                TreeNode poll = arrayDeque.poll();
+                assert poll != null;
+                int temp_index = poll.position;
+                while (index++ < temp_index) {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append(poll.val);
+                --count;
+                if (poll.left != null) {
+                    arrayDeque.add(poll.left);
+                    keyQueue.add(new Pair(poll.position - 1, "/"));
+                    ++size;
+                }
+                if (poll.right != null) {
+                    arrayDeque.add(poll.right);
+                    keyQueue.add(new Pair(poll.position + 1, "\\"));
+                    ++size;
+                }
+            }
+            stringBuilder.append("\n");
+            count = size;
+            index = 0;
+            while (!keyQueue.isEmpty()) {
+                Pair poll = keyQueue.poll();
+                while (index++ < poll.position) {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append(poll.key);
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }
