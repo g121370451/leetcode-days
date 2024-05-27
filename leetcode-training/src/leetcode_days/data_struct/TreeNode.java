@@ -40,7 +40,7 @@ public class TreeNode {
             this.left.getPosition();
         }
         if (this.right != null) {
-            this.right.position = (this.position + 2);
+            this.right.position = (this.position + String.valueOf(this.val).length() +1);
             this.right.getPosition();
         }
     }
@@ -122,7 +122,7 @@ public class TreeNode {
                 }
                 if (poll.right != null) {
                     arrayDeque.add(poll.right);
-                    keyQueue.add(new Pair(poll.position + 1, "\\"));
+                    keyQueue.add(new Pair(poll.position + String.valueOf(poll.val).length(), "\\"));
                     ++size;
                 }
             }
