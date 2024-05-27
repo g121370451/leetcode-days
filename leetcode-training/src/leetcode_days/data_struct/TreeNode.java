@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class TreeNode {
 
-    private static class Pair {
+    static class Pair {
         public int position;
         public String key;
 
